@@ -57,12 +57,15 @@ if ( ! function_exists( 'infinitnet_relevant_recent_posts_shortcode' ) ) {
             }
         }
 
-        $post_id = isset($post) ? $post->ID : 0;
-        $scope = $atts['scope'];
-        $date = $atts['date'];
-
-        $cache_key = "rrp_{$post_id}_{$scope}_{$date}";
-
+        $relevant_atts = array(
+            'count' => $atts['count'],
+            'scope' => $atts['scope'],
+            'date'  => $atts['date']
+        );
+        $serialized_atts = serialize($relevant_atts);
+        
+        $cache_key = "rrp_" . md5($serialized_atts);
+        
         $output = get_transient($cache_key);
 
         if ($output === false) {
@@ -101,9 +104,9 @@ if ( ! function_exists( 'infinitnet_relevant_recent_posts_shortcode' ) ) {
 function infinitnet_clear_recent_relevant_posts_cache($post_id) {
     global $wpdb;
 
-    $wpdb->query("DELETE FROM $wpdb->options WHERE option_name LIKE '%rrp_{$post_id}_%'");
+    $wpdb->query("DELETE FROM $wpdb->options WHERE option_name LIKE '%rrp_%'");
 }
 
 add_action('save_post', 'infinitnet_clear_recent_relevant_posts_cache');
 add_action('delete_post', 'infinitnet_clear_recent_relevant_posts_cache');
-add_action('transition_post_status', 'infinitnet_clear_recent_relevant_posts_cache', 10, 3);
+add_action('transition_post_status', 'infinitnet_clear_recent_relevant_posts_cache');
