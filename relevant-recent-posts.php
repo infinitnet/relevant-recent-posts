@@ -6,7 +6,7 @@
  * Author URI: https://infinitnet.io/
  * Plugin URI: https://github.com/infinitnet/relevant-recent-posts
  * Update URI: https://github.com/infinitnet/relevant-recent-posts
- * Version: 1.1
+ * Version: 1.2
  * License: GPLv3
  * Text Domain: relevant-recent-posts
  */
@@ -65,6 +65,18 @@ if ( ! function_exists( 'infinitnet_relevant_recent_posts_shortcode' ) ) {
         $serialized_atts = serialize($relevant_atts);
         
         $cache_key = "rrp_" . md5($serialized_atts);
+
+        if ($atts['scope'] === 'category') {
+            $categories = get_the_category($post->ID);
+            if (!empty($categories)) {
+                $category_ids = array_map(function($category) {
+                    return $category->term_id;
+                }, $categories);
+                $args['category__in'] = $category_ids;
+
+                $cache_key .= '_' . implode('_', $category_ids);
+            }
+        }
         
         $output = get_transient($cache_key);
 

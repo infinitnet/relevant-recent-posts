@@ -28,5 +28,6 @@ For support, feature requests, or bug reports, please visit the [GitHub issues p
 Contributions to the plugin are welcome. Please fork the GitHub repository and submit a pull request.
 
 ## Changelog
+- **1.2**: Fix: cache key has to include category ID.
 - **1.1**: Transient caching logic and cache clearing improved.
 - **1.0**: Initial release.
