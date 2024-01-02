@@ -25,7 +25,7 @@ if ( ! function_exists( 'infinitnet_relevant_recent_posts_shortcode' ) ) {
         ), $atts, 'recentposts');
 
         $count = intval($atts['count']);
-        $count = max(1, min($count, 200));
+        $count = max(1, min($count, 9999));
 
         $valid_scopes = ['category', 'global'];
         if (!in_array($atts['scope'], $valid_scopes)) {
