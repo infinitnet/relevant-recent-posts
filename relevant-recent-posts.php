@@ -6,7 +6,7 @@
  * Author URI: https://infinitnet.io/
  * Plugin URI: https://github.com/infinitnet/relevant-recent-posts
  * Update URI: https://github.com/infinitnet/relevant-recent-posts
- * Version: 1.3
+ * Version: 1.4
  * License: GPLv3
  * Text Domain: relevant-recent-posts
  */
