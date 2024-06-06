@@ -21,11 +21,11 @@ if ( ! function_exists( 'infinitnet_relevant_recent_posts_shortcode' ) ) {
             'scope' => 'category',
             'date'  => 'published',
             'class' => '',
-            'nonav' => false
+            'nonav' => false,
         ), $atts, 'recentposts');
 
         $count = intval($atts['count']);
-        $count = max(1, min($count, 9999));
+        $count = min(max(1, $count), 9999);
 
         $valid_scopes = ['category', 'global'];
         if (!in_array($atts['scope'], $valid_scopes)) {
@@ -37,14 +37,14 @@ if ( ! function_exists( 'infinitnet_relevant_recent_posts_shortcode' ) ) {
             $atts['date'] = 'published';
         }
 
-        if (!isset($post) || $post == null) {
+        if (empty($post)) {
             return '<p>' . esc_html__('Recent posts cannot be displayed.', 'relevant-recent-posts') . '</p>';
         }
 
         $args = array(
             'posts_per_page' => $count,
             'orderby' => ($atts['date'] === 'modified') ? 'modified' : 'date',
-            'order'   => 'DESC'
+            'order'   => 'DESC',
         );
 
         if ($atts['scope'] === 'category') {
@@ -60,7 +60,7 @@ if ( ! function_exists( 'infinitnet_relevant_recent_posts_shortcode' ) ) {
         $relevant_atts = array(
             'count' => $atts['count'],
             'scope' => $atts['scope'],
-            'date'  => $atts['date']
+            'date'  => $atts['date'],
         );
         $serialized_atts = serialize($relevant_atts);
         
@@ -78,9 +78,7 @@ if ( ! function_exists( 'infinitnet_relevant_recent_posts_shortcode' ) ) {
             }
         }
         
-        $output = get_transient($cache_key);
-
-        if ($output === false) {
+        if (($output = get_transient($cache_key)) === false) {
             $recent_posts_query = new WP_Query($args);
     
             if ($recent_posts_query->have_posts()) {
